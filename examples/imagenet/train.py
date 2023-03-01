@@ -353,6 +353,12 @@ def train_and_evaluate(config: ml_collections.ConfigDict,
     if (step + 1) % steps_per_epoch == 0:
       epoch = step // steps_per_epoch
       eval_metrics = []
+      
+      if epoch == config.num_epochs - 3:
+          jax.profiler.start_trace("/tmp/jax_profiles")
+      if epoch == config.num_epochs - 2:
+          jax.profiler.stop_trace()
+
 
       # sync batch statistics across replicas
       state = sync_batch_stats(state)
