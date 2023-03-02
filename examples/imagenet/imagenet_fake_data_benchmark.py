@@ -64,7 +64,7 @@ class ImagenetBenchmarkFakeData(Benchmark):
     self.report_extras({
         'description': 'ImageNet ResNet50 with fake data',
         'model_name': 'resnet50',
-        'parameters': f'hp=true,bs={config.batch_size}',
+        'parameters': f'hp=true,bs={FLAGS.config.batch_size}',
     })
 
 
