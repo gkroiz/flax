@@ -21,37 +21,43 @@ That can be fetched with the script `flax/tests/download_dataset_metadata.sh`.
 import pathlib
 import time
 
+from absl import flags
 from absl.testing import absltest
 from absl.testing.flagsaver import flagsaver
 from flax.testing import Benchmark
 import jax
+from ml_collections import config_flags
 import tensorflow_datasets as tfds
 
+FLAGS = flags.FLAGS
+
 # Local imports.
-from configs import fake_data_benchmark as config_lib
 import train
 
 # Parse absl flags test_srcdir and test_tmpdir.
 jax.config.parse_flags_with_absl()
-
+config_flags.DEFINE_config_file(
+    'config',
+    None,
+    'File path to the training hyperparameter configuration.',
+    lock_config=True)
 
 class ImagenetBenchmarkFakeData(Benchmark):
   """Runs ImageNet using fake data for quickly measuring performance."""
 
   def test_fake_data(self):
     workdir = self.get_tmp_model_dir()
-    config = config_lib.get_config()
     # Go two directories up to the root of the flax directory.
     flax_root_dir = pathlib.Path(__file__).absolute().parents[2]
     data_dir = str(flax_root_dir) + '/.tfds/metadata'
 
     # Warm-up first so that we are not measuring just compilation.
     with tfds.testing.mock_data(num_examples=1024, data_dir=data_dir):
-      train.train_and_evaluate(config, workdir)
+      train.train_and_evaluate(FLAGS.config, workdir)
 
     start_time = time.time()
     with tfds.testing.mock_data(num_examples=1024, data_dir=data_dir):
-      train.train_and_evaluate(config, workdir)
+      train.train_and_evaluate(FLAGS.config, workdir)
     benchmark_time = time.time() - start_time
 
     self.report_wall_time(benchmark_time)
