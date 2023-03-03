@@ -23,7 +23,7 @@ def get_config():
   """Get the hyperparameter configuration for Fake data benchmark."""
   # Override default configuration to avoid duplication of field definition.
   config = default_lib.get_config()
-  config.batch_size = 2048
+  config.batch_size = 1028
   config.half_precision = True
   config.num_epochs = 1
 
@@ -31,6 +31,6 @@ def get_config():
   # `steps_per_epoch` as input_pipeline.TRAIN_IMAGES // batch_size
   config.num_train_steps = -1
   # and `steps_per_eval` as input_pipeline.EVAL_IMAGES // batch_size
-  config.steps_per_eval = 512
+  config.steps_per_eval = -1
 
   return config
