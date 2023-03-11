@@ -23,7 +23,7 @@ def get_config():
   """Get the hyperparameter configuration for Fake data benchmark."""
   # Override default configuration to avoid duplication of field definition.
   config = default_lib.get_config()
-  config.batch_size = 1028
+  config.batch_size = 1024
   config.half_precision = True
   config.num_epochs = 1
 
